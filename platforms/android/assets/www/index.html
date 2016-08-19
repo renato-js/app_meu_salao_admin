@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>APP AGENDA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/jqm/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="src/css/style.min.css">
+
+    <!-- JAVASCRIPT -->
+    <script type="text/javascript" src="assets/jq/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="assets/jqm/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+
+    <!-- sweet alert -->
+    <script src="assets/sweetalert/sweetalert.min.js"></script> 
+    <link rel="stylesheet" type="text/css" href="assets/sweetalert/sweetalert.css">
+
+    <!-- swipe -->
+    <link href='assets/swipe/style.css' rel='stylesheet'/>
+    
+    <!-- fontes Google -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:100,200,400,300,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQNPiveS1VKwLRt7zFUJ4N2TxsHH5da1k"></script>
+
+    <!-- mascara -->
+    <script type="text/javascript" src="assets/mask/jquery.mask.min.js"></script>
+
+
+</head>
+<body>
+    
+
+    <!-- loading screen -->
+    <div id="loading-circle" style="display: none;"><img src="img/theme/loading.gif">Carregando...</div>
+
+    <!-- PAGINA DE LOADING -->
+    <section data-role="page" id="page1">
+        <article data-role="content">
+            <img src="img/theme/logo.png" alt="" class="logo" id="logo-carregar"> <br>
+        </article><!-- /content -->
+    </section>
+
+
+    <!-- PAGINA DE LOGIN -->
+    <section data-role="page" id="pagelogin">
+        <article data-role="content">
+
+        <div class="wrap">
+            
+            <img src="img/theme/logo.png" alt="" class="logo"> <br><br>
+            <h2 class="txt-branco">Login</h2>
+            <p class="txt-branco">Agende horários, veja seu histórico e receba promoções e novidades diretamente do seu smartphone!</p>
+        
+            <form action="#" name="fr-login" id="fr-login">
+                <input type="email" id="fr-login-email" placeholder="E-mail">
+                <input type="password" id="fr-login-pass" placeholder="Senha">
+
+                <div class="grid">
+                        <a href="#" class="bt-verde bt-full2" onclick="logarUser()">ENTRAR</a>
+
+                </div>
+            </form>
+
+            <p class="txt-branco">Versão 1.2.1</p>
+        </div>
+        </article><!-- /content -->
+    </section>
+
+ 
+
+
+
+
+
+
+    <!-- MODAL DELETAR PERFIL -->
+    <section id="modaldeleteprofile" data-role="page">
+        <header data-role='none' class='ui-header'>
+            <h1 class="espaco-left">Deletar perfil</h1>
+            <a href="#" class="bt-header bt-right" onclick="voltarApp()"><div class="ico-vazio"><i class="material-icons">close</i></div></a>
+        </header><!-- /header -->
+
+        <article data-role="content">
+
+        <div class="box-material wrap">
+                <h2>Deseja excluir perfil?</h2>
+                <p>Deletando seu perfil, você perde todos os seus pontos e histórico, tornando seu e-mail inutilizável.</p>
+                    
+                <form action="#" name="fr-deletarperfil" id="fr-deletarperfil">
+                    <br>
+                    <label for="">Confirmar senha:</label>
+                    <input type="password" id="fr-del-pass"  placeholder="Sua senha">
+
+                    <a href="#" class="bt-vermelho bt-full" onclick="deletarUserCheck('fr-deletarperfil')">EXCLUIR PERFIL</a>
+                </form>
+        </div>
+
+        </article><!-- /content -->
+
+    </section><!-- /page -->
+
+
+
+    <!-- MODAL EDITAR PERFIL -->
+    <section id="modaleditprofile" data-role="page">
+        <header data-role='none' class='ui-header'>
+            <h1 class="espaco-left">Editar perfil</h1>
+            <a href="#" class="bt-header bt-right" onclick="voltarApp()"><div class="ico-vazio"><i class="material-icons">close</i></div></a>
+        </header><!-- /header -->
+
+        <article data-role="content">
+        <div class="box-material  box-margin wrap">
+                <h2>Editando perfil</h2>
+                <p >Selecione os campos abaixo para poder editar seu perfil!</p>
+                <br>
+                <strong><p class="ng-userEmail"></p></strong>
+                <br>
+                <br>
+                <form action="#" name="fr-editperfil" id="fr-editperfil">
+                <label for="">Dados pessoais</label>
+                    <input type="text" id="fr-edit-nome" placeholder="Nome"> 
+                    
+                    <div style="display:none" data-role="none">   
+                        <input type="tel" id="fr-edit-telefone" class="mk-telefone"  placeholder="Telefone"> 
+                        <input type="tel" id="fr-edit-celular" class="mk-telefone"  placeholder="Celular"> 
+                        <label for="">Endereço</label>
+                        <input type="tel" id="fr-edit-cep" class="mk-cep" placeholder="CEP" onblur="pesquisacep(this.value);"> 
+
+                        <select name="estado" id="fr-edit-estado" data-role='none'> 
+                            <option value="estado">Selecione o Estado</option> 
+                            <option value="AC">Acre</option> 
+                            <option value="AL">Alagoas</option> 
+                            <option value="AM">Amazonas</option> 
+                            <option value="AP">Amapá</option> 
+                            <option value="BA">Bahia</option> 
+                            <option value="CE">Ceará</option> 
+                            <option value="DF">Distrito Federal</option> 
+                            <option value="ES">Espírito Santo</option> 
+                            <option value="GO">Goiás</option> 
+                            <option value="MA">Maranhão</option> 
+                            <option value="MT">Mato Grosso</option> 
+                            <option value="MS">Mato Grosso do Sul</option> 
+                            <option value="MG">Minas Gerais</option> 
+                            <option value="PA">Pará</option> 
+                            <option value="PB">Paraíba</option> 
+                            <option value="PR">Paraná</option> 
+                            <option value="PE">Pernambuco</option> 
+                            <option value="PI">Piauí</option> 
+                            <option value="RJ">Rio de Janeiro</option> 
+                            <option value="RN">Rio Grande do Norte</option> 
+                            <option value="RO">Rondônia</option> 
+                            <option value="RS">Rio Grande do Sul</option> 
+                            <option value="RR">Roraima</option> 
+                            <option value="SC">Santa Catarina</option> 
+                            <option value="SE">Sergipe</option> 
+                            <option value="SP">São Paulo</option> 
+                            <option value="TO">Tocantins</option> 
+                        </select> 
+
+                        <input type="text" id="fr-edit-cidade" placeholder="Cidade"> 
+                        <input type="text" id="fr-edit-bairro" placeholder="Bairro"> 
+                        <input type="text" id="fr-edit-rua" placeholder="Rua"> 
+                        <input type="text" id="fr-edit-complemento" placeholder="Complemento"> 
+                        <input type="tel" id="fr-edit-numero" class="mk-number" placeholder="Número casa"> 
+                    </div>
+
+
+
+                    <!-- <input type="password" class="form-important" id="fr-edit-pass"  placeholder="Nova senha"> -->
+                    
+                    <label for="">Confirmar senha</label>
+                    <input type="password" class="form-important" id="fr-edit-confirmpass"  placeholder="Confirmar senha">
+
+                    <a href="#" class="bt-verde bt-full" onclick="editarPerfilCheck('fr-editperfil')">ATUALIZAR PERFIL</a>
+                </form>
+        </div>
+        </article><!-- /content -->
+    </section><!-- /page -->
+
+
+
+
+
+
+
+
+    <!-- NOTIFICACOES -->
+    <section data-role="page" id="pagenotification" data-position="fixed">
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                <div class="cover-user">
+                    <p class="ng-userNome">Meu nome</p>
+                    <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+        
+
+
+        <header data-role='none' class='ui-header'>
+            <h1>Notificações</h1>
+            <a href="#" class="bt-header bt-right" onclick="return abrirTooltip()"><div class="ico-vazio"><i class="material-icons">&#xE5D4;</i></div></a>
+            <a href="#" class="bt-header bt-left ui-link ev-voltar"><div class="ico-vazio"><i class="material-icons">&#xE5C4;</i></div></a>
+        
+            <!-- menu tooltip -->
+            <div id="" class="ui-menu-tooltip menu-tooltip">
+                <ul class="ls-menu-tooltip">
+                    <li><a href="#" onclick="getNotificationUser()">Atualizar</a></li>
+                    <li><a href="#" onclick="limparNotifications()">Limpar Histórico</a></li>
+                </ul>
+            </div>
+
+        </header><!-- /header -->
+
+
+        <article data-role="content">
+            <div >
+                <!-- <h2 class="txt-azul wrap">Minhas notificações</h2> -->
+                <ul class="ls-notificacoes" id="ls-notificacoes"></ul>
+            </div>
+
+        </article><!-- /content -->
+    </section>
+
+
+
+
+
+
+
+    <!-- PAGE AGENDAMENTO -->
+    <section data-role="page" id="pageagendar" data-position="fixed">
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                <div class="cover-user">
+                    <p class="ng-userNome">Meu nome</p>
+                    <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+        
+
+
+        <header data-role='none' class='ui-header'>
+            <h1 class="">Agendar horário</h1>
+            <a href="#" class="bt-header bt-left ui-link ev-voltar"><div class="ico-vazio"><i class="material-icons">&#xE5C4;</i></div></a>            
+            <!-- <a href="#" class="bt-header bt-left ui-link ev-fechar" ><div class="ico-vazio"><i class="material-icons">&#xE5CD;</i></div></a> -->
+        </header><!-- /header -->
+
+ 
+        <article data-role="content">
+
+
+            <!-- cadastrar horario em servico -->
+            <div class="box-material">
+
+                <div class="descricao-servico" id="detalhe-servico-view"></div>
+
+                <form action="#" name="fr-agendarhorario" id="fr-agendarhorario" class="wrap"  style="display: none;">
+                    <hr>
+
+                    <input type="hidden" name="" id="fr-ag-servico" value="" >
+
+                    <h2>Escolha seu horário abaixo</h2>
+                    <!-- <label for="">Profissionais disponíveis</label> -->
+                    <div class="input-select-style" id="fr-ag-profissional-label">                    
+                        <select name="profissional" data-role='none' id="fr-ag-profissional" > 
+                            <!-- <option value=""> - </option>  -->
+                        </select>
+                        <span class="content-label">Selecione o profissional</span>
+                    </div>
+
+    
+                    <!-- <label for="">Dias disponíveis</label> -->
+                    <div class="input-select-style select-disabled" id="fr-ag-dia-label">                    
+                    <select name="dia" data-role='none' id="fr-ag-dia" disabled="true"> 
+                        <!-- <option value=""> - </option>  -->
+                    </select>   
+                    <span class="content-label">Selecione um dia</span>
+                    </div>
+
+
+                    <!-- <label for="">Horários disponíveis</label> -->
+                    <div class="input-select-style select-disabled" id="fr-ag-horario-label">                    
+                    <select name="horario" data-role='none' id="fr-ag-horario" disabled="true"> 
+                        <!-- <option value=""> - </option>  -->
+                    </select>   
+                    <span class="content-label">Selecione um horário</span>
+                    </div>
+
+                </form>
+        
+
+                <div class="ui-control" id="controle-agendar" style="display: none;">
+                    <a href="#" class="bt-disabled" id="bt-marcar-agendamento" style="display:none;" onclick="return cadastrarAgendamento()">Confirmar horário</a>
+                    <a href="#" class="bt-confirm" id="bt-abrir-agendamento" onclick="return abrirCadastrarAgendamento()">Agendar horário</a>
+                </div>
+               
+            </div>
+
+
+
+ 
+        </article><!-- /content -->
+    </section>
+
+
+
+
+
+
+
+
+<!-- PAGE AGENDAMENTO -->
+    <section data-role="page" id="pageagendamentoinfo" data-position="fixed">
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                <div class="cover-user">
+                    <p class="ng-userNome">Meu nome</p>
+                    <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+        
+
+
+        <header data-role='none' class='ui-header-gray'>
+            <h1 class="">Detalhe Agendamento</h1>
+            <a href="#" class="bt-header bt-left ui-link ev-fechar" data-transition="slideup" data-direction="reverse" ><div class="ico-vazio"><i class="material-icons">&#xE5CD;</i></div></a>
+        </header><!-- /header -->
+
+
+        <article data-role="content">
+
+            <div class="box-servico" id="content-detalhe-agendamento" style="display: none;">
+                <div class="descricao-servico" >                
+                    <h2 id="ng-age-servico"></h2> 
+                    <ul>
+                        <li><strong>N agendamento:</strong> <span id="ng-age-ref"></span></li>
+                        <li><strong>Cliente:</strong> <span id="ng-age-user"></span></li>
+                        <li><strong>Profissional:</strong> <span id="ng-age-profissional"></span></li>
+                        <li><strong>Dia da consulta:</strong> <span id="ng-age-consulta"></span></li>
+                        <li><strong>horário marcado:</strong> <span id="ng-age-horario"></span></li>
+                        <li><strong>Preço:</strong> <span id="ng-age-preco"></span></li>
+                        <li><strong>Tempo:</strong> <span id="ng-age-tempo"></span></li>
+                        <li><strong>Criação:</strong> <span id="ng-age-criacao"></span></li>
+                        <li><strong>Status:</strong> <span id="ng-age-status"></span></li>
+                    </ul>
+                    <br>
+                    <h2>Endereço para o atendimento</h2>
+                    <ul id="ng-age-endereco"></ul>
+
+                </div>
+                <div class="ui-control" id="controle-agendamento">
+                    
+                </div>
+
+            </div>
+
+        </article><!-- /content -->
+    </section>
+
+
+
+
+
+
+
+
+
+    <!-- PERFIL -->
+    <section data-role="page" id="pagependentes" data-position="fixed">
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu" id="mypanel2">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                    <div class="cover-user">
+                        <p class="ng-userNome">Meu nome</p>
+                        <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                    </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <li><a href="#pageminhagenda"><i class="material-icons">&#xE614;</i> Minha agenda</a></li>
+                <li><span><i class="material-icons">&#xE616;</i> Pedidos pendentes</span></li>
+                <li><a href="#pagehistorico"><i class="material-icons">&#xE3E0;</i> Histórico</a></li>
+                <li><a href="#pageinfo"><i class="material-icons">info</i> Sobre</a></li>
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+        
+        <header data-role='none' class='ui-header'>
+            <h1 class="">Pedidos pendentes</h1>
+
+            <a href="#mypanel2" class="bt-header bt-left"><div class="ico-vazio"><i class="material-icons">menu</i></div></a>
+            <a href="#pagenotification" class="bt-header bt-right" data-transition="slide"><div class="ico-vazio"><i class="material-icons">&#xE7F4;</i></div></a>            
+
+        </header><!-- /header -->
+
+        <article data-role="content">
+<!--             <div class="box-material">
+                <h2 class="txt-azul wrap">Pedidos</h2>
+                <hr class="no-margin">
+            </div> -->
+
+            <div class="fr-padrao ng-pendentes" id="lista-historico"> </div> 
+    
+
+
+
+        </article> <!-- /content -->
+    </section>
+
+
+
+
+
+    <!-- PAGE MEUS AGENDAMENTOS  -->
+    <section id="pageminhagenda" data-role="page">
+
+        <!-- Menu principal -->
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu" id="mypanel3">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                <div class="cover-user">
+                    <p class="ng-userNome">Meu nome</p>
+                    <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <li><span><i class="material-icons">&#xE614;</i> Minha agenda</span></li>
+                <li><a href="#pagependentes"><i class="material-icons">&#xE616;</i> Pedidos pendentes</a></li>
+                <li><a href="#pagehistorico"><i class="material-icons">&#xE3E0;</i> Histórico</a></li>
+                <li><a href="#pageinfo"><i class="material-icons">info</i> Sobre</a></li>
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+        
+        <header data-role='none' class='ui-header'>
+            <h1>Minha agenda</h1>
+            <a href="#pagenotification" class="bt-header bt-right" data-transition="slide"><div class="ico-vazio"><i class="material-icons">&#xE7F4;</i></div></a>            
+            <a href="#mypanel3" class="bt-header bt-left"><div class="ico-vazio"><i class="material-icons">menu</i></div></a>
+        </header><!-- /header -->
+
+
+        <article data-role="content">
+
+            <div class="box-material wrap" id="box-data-info">
+                <div class="box-data">                
+                    <p>Veja abaixo todos os seus agendamentos pendentes e confirmados.</p>
+                </div>
+            </div>
+            
+            <div class="box-material wrap box-margin">
+                <form action="#" id="fr-editperfil">
+                    
+ 
+
+
+                <div class="input-select-style" id="fr-ag-data-label">              
+                    <select name="admin_dia-agenda" id="dias-agenda" data-role='none' onchange="carregarAgendamentos()">
+                        
+                    </select>
+                    <span class="content-label">HOJE</span>
+                </div>
+
+
+                </form>
+            </div>
+
+            <!-- meus agendamentos -->
+            <div class="fr-padrao ng-agendamentos2"> 
+            </div>
+
+            <!-- meus agendamentos -->
+            <div class="fr-padrao ng-agendamentos1"> 
+            </div>
+
+
+        </article><!-- /content -->
+    </section><!-- /page -->    
+
+
+
+
+    <!-- PAGE HISTORICO DE AGENDAMENTOS -->
+    <section id="pagehistorico" data-role="page">
+
+        <!-- Menu principal -->
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu" id="mypanel4">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                <div class="cover-user">
+                    <p class="ng-userNome">Meu nome</p>
+                    <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <li><a href="#pageminhagenda"><i class="material-icons">&#xE614;</i> Minha agenda</a></li>
+                <li><a href="#pagependentes"><i class="material-icons">&#xE616;</i> Pedidos pendentes</a></li>
+                <li><span><i class="material-icons">&#xE3E0;</i> Histórico</span></li>
+                <li><a href="#pageinfo"><i class="material-icons">info</i> Sobre</a></li>
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+
+        
+        <header data-role='none' class='ui-header'>
+            <h1>Histórico</h1>
+            <a href="#pagenotification" class="bt-header bt-right" data-transition="slide"><div class="ico-vazio"><i class="material-icons">&#xE7F4;</i></div></a>            
+            <a href="#mypanel4" class="bt-header bt-left"><div class="ico-vazio"><i class="material-icons">menu</i></div></a>
+        </header><!-- /header -->
+
+
+        <article data-role="content">
+            <div class="box-material wrap" id="box-data-info">
+                <div class="box-data">                
+                    <p>Aqui estão seus agendamentos finalizado ou confirmado. Toque em um deles para ver detalhes.</p>
+                </div>
+            </div>
+
+            <!-- meus agendamentos -->
+            <div class="fr-padrao ng-agendamentos3" id="lista-historico"> </div> 
+
+
+
+        </article><!-- /content -->
+    </section><!-- /page -->    
+
+
+
+
+
+
+    <!-- SOBRE LOJA -->
+    <section id="pageinfo" data-role="page">
+
+        <!-- Menu principal -->
+        <div data-role="panel" data-position="left" data-display="overlay" class="ui-menu" id="mypanel5">
+            <ul data-role="none">
+                <li class="cover-menu"><img src="img/theme/logo.png" alt="">
+                <div class="cover-user">
+                    <p class="ng-userNome">Meu nome</p>
+                    <p class="ng-userEmail"><i>Meu e-mail</i></p>
+                </div>
+                </li>
+                <!-- <li><a href="#pageindex"><i class="material-icons">home</i> <div>Nossos serviços</div></a></li> -->
+                <li><a href="#pageminhagenda"><i class="material-icons">&#xE614;</i> Minha agenda</a></li>
+                <li><a href="#pagependentes"><i class="material-icons">&#xE616;</i> Pedidos pendentes</a></li>
+                <li><a href="#pagehistorico"><i class="material-icons">&#xE3E0;</i> Histórico</a></li>
+                <li><span><i class="material-icons">info</i> Sobre</span></li>
+                <hr>
+                <li><a href="#" class="ev-deslogar bt-deslogar"><i class="material-icons">&#xE879;</i> Deslogar</a></li>
+            </ul>
+        </div>
+        
+        <header data-role='none' class='ui-header'>
+            <h1 class="ng-appNome"></h1>
+            <a href="#pagenotification" class="bt-header bt-right" data-transition="slide"><div class="ico-vazio"><i class="material-icons">&#xE7F4;</i></div></a>            
+            <a href="#mypanel5" class="bt-header bt-left"><div class="ico-vazio"><i class="material-icons">menu</i></div></a>
+        </header><!-- /header -->
+
+
+        <article data-role="content">
+            <div class="box-material">
+                <h2 class="txt-azul wrap">Contato</h2>
+                <hr class="no-margin">
+            </div>
+
+            <div class="box-material wrap box-margin" id="box-data-info">
+                <div class="box-data">                
+                    <p>Tel: 31 97309-6827</p>
+                    <p>whatsapp: 31 97309-6827 </p>
+                    <p>Atendimento seg a sex - 9h as 18h </p>
+                    <p>Email: contato@onwebstudio.com.br</p>
+                    <p>Site: onwebstudio.com.br</p>
+
+                    <div class="grid" id="ui-contato">
+                        <a href="tel:+31-97309-6827" onclick="ligarNumero('31-97309-6827')" class="bt-controle bt-left"><div class="ico-vazio"><i class="material-icons">&#xE61D;</i> </div><p>Ligar agora</p></a>                        
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="box-material">
+                <h2 class="txt-azul wrap">Onde estamos</h2>
+                <hr class="no-margin">
+            </div>
+             <div class="box-material wrap" id="box-data-info">
+                <div class="box-data">                
+                    <p><strong>Endereço:</strong></p>
+                    <p>Rua Franscisco Bicalho, 2352 - Loja 17B</p>
+                    <p>Bairro Caiçara</p>
+                    <p>Belo Horizonte MG</p>
+                </div>
+            </div>
+            
+            <div class="box-material">
+                <div id="map-canvas"></div>
+            </div>
+
+
+            <div class="box-material box-margin">
+                <div class="box-material">
+                    <h2 class="txt-azul wrap">Quem somos</h2>
+                    <hr class="no-margin">
+                </div>
+              
+                <div class="wrap" id="ng-quem"><p>A Onweb Studio é uma pequena empresa fundada na belíssima cidade do pão de queijo, Belo Horizonte em Minas Gerais! Procuramos unir inovação e criatividade em cada projeto realizado.</p></div>
+            </div>
+
+        <div class="box-material box-margin">
+            <div class="box-material">
+                <h2 class="txt-azul wrap">Sobre o aplicativo</h2>
+                <hr class="no-margin">
+            </div>
+            <div class="wrap" id="display-appinfo">
+                <p><strong>Desenvolvido por:</strong> Renato Santos</p>
+                <p><strong>Feedback:</strong> renato@onwebstudio.com.br</p>
+                <p><strong>Site:</strong> onwebstudio.com.br</p>
+                <p><strong>Versão:</strong> 2.0</p>
+            </div>
+        </div>
+
+        </article><!-- /content -->
+    </section><!-- /page -->    
+
+
+
+    <!-- hidden preloader -->
+    <img src="img/theme/loading.gif" style="display: none;">
+
+    <!-- principal elemento -->
+    <script type="text/javascript" src="src/js/main.min.js"></script>
+
+</body>
+</html>
